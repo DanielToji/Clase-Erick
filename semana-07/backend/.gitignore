@@ -1,0 +1,8 @@
+# File Path: ./semana-05/backend/.gitignore
+node_modules/
+dist/
+.env
+*.log
+logs/
+coverage/
+.DS_Store
