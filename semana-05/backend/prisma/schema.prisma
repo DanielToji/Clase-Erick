@@ -1,0 +1,38 @@
+// File Path: ./semana-05/backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Categoría de habitación (recurso secundario, relación 1:N).
+model RoomType {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  description String?
+  basePrice   Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  rooms       Room[]
+}
+
+/// Habitación física del hotel (recurso principal).
+model Room {
+  id          String    @id @default(uuid()) @db.Uuid
+  roomNumber  String    @unique
+  price       Decimal   @db.Decimal(10, 2)
+  capacity    Int
+  available   Boolean   @default(true)
+  floor       Int
+  roomType    RoomType  @relation(fields: [roomTypeId], references: [id])
+  roomTypeId  String    @db.Uuid
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([roomTypeId])
+  @@index([available])
+}
