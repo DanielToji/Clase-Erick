@@ -1,0 +1,22 @@
+# File Path: ./semana-06/backend/docker-compose.yml
+services:
+  mongo:
+    image: mongo:7
+    container_name: hotel-mongo-w06
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: hotel
+      MONGO_INITDB_ROOT_PASSWORD: hotel
+      MONGO_INITDB_DATABASE: hotel_db
+    ports:
+      - "27018:27017"
+    volumes:
+      - hotel_mongo_w06:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  hotel_mongo_w06:
